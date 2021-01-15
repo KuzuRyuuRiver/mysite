@@ -6,7 +6,6 @@
 #######################################################################
 import numpy as np
 import streamlit as st
-from collections import OrderedDict, namedtuple
 import pandas as pd
 from StatisticData import StatisticClass
 #st.set_page_config(layout="wide")
