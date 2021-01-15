@@ -6,10 +6,8 @@
 #######################################################################
 import numpy as np
 import pandas as pd
-import os
 from RadarChart import RadarChartPlot
 
-# os.makedirs(submission_csv_path, exist_ok=True)  
 class StatisticClass:
     def __init__(self, path = None):
         self.IDNameDict    = {'No':'feedbackSheetID', '学部or院':'BorM', '学生番号':'studentID'}  
