@@ -9,6 +9,9 @@ import streamlit as st
 import pandas as pd
 from StatisticData import StatisticClass
 #st.set_page_config(layout="wide")
+import pathlib
+HERE     = pathlib.Path(__file__).parent
+FONTPATH = HERE.joinpath('.fonts', 'ipaexg.ttf')
 
 @st.cache
 def loadData(path):    
@@ -28,6 +31,7 @@ def main():
         _main(workSheetFile, selBorM, searchID)
     else:
         st.header('サイドバーよりファイルを選択してください')
+        pass
 
 def _main(workSheetFile, selBorM, searchID):
     workSheetCSV = loadData(workSheetFile)
@@ -61,7 +65,7 @@ def graphPage(stateDict):
     d1 = dict(selector=".col1", props=[('min-width', '100px')]) # name
     d2 = dict(selector=".col2", props=[('min-width', '3000px')]) # pref
     # アップロードファイルをメイン画面にデータ表示    fig = statInst.fig
-    fig = statInst.plotGraph(feedbackSheetID)
+    fig = statInst.plotGraph(feedbackSheetID, fontPath = FONTPATH)
     st.pyplot(fig)
     st.header('スコア')
     table = statInst.scoreDF.loc[feedbackSheetID].reset_index().assign(hack='').set_index('hack')

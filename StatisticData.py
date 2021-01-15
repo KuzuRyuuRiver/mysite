@@ -40,11 +40,13 @@ class StatisticClass:
         self.itemWorkSheet = self.workSheetDF.columns
         self.statDFDict    = self.computeStatisticBorM()   
         
-    def plotGraph(self, feedbackSheetID):
+    def plotGraph(self, feedbackSheetID, fontPath = None):
         score       = self.scoreDF.loc[feedbackSheetID]        
         itemLabels  = self.labelDict.values()
         valueList   = [i for i in range(6)]
         rcp         = RadarChartPlot(itemLabels, valueList)
+        if fontPath is not None:            
+            rcp.setFontPath(fontPath)
         values      = score[itemLabels].values.ravel()
         rcp.plot(values, color='red', linestyle='solid', marker='.', label=f'No {feedbackSheetID}', fill=True)
         # statDF      = self.statDF.loc['score_mean'][itemLabels]

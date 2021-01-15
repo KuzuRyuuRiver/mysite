@@ -5,12 +5,12 @@
 # 200000:                                                             #
 #######################################################################
 import matplotlib
-# matplotlib.use('Agg')
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 #import japanize_matplotlib
 import numpy as np
 from matplotlib.font_manager import FontProperties
-fontprop = FontProperties(fname='.fonts/ipaexg.ttf', size=10)
+import os
 
 class RadarChartPlot:
     def __init__(self, itemLlabels, valueList, valueLabels = None):
@@ -18,11 +18,15 @@ class RadarChartPlot:
         self.valueList   = valueList
         self.itemValues  = []
         self.dic  = []
+        self.fontprop = None
         if valueLabels is None:
             self.valueLabels = valueList
         else:
             self.valueLabels = valueLabels
-        
+    
+    def setFontPath(self, path):
+        self.fontprop = FontProperties(fname=path, size=10)
+
     def plot(self, values, color=None, linestyle='solid', marker='.', label=None, fill=False):
         self.itemValues.append(values)
         self.dic.append({'color':color, 'linestyle':linestyle, 'marker':marker, 'label':label, 'fill':fill})
@@ -33,13 +37,13 @@ class RadarChartPlot:
         
         # 項目軸
         thetagridAngle = np.linspace(0, 2 * np.pi, len(self.itemLlabels) + 1, endpoint=True) + 0.5 * np.pi
-        ax.set_thetagrids(np.rad2deg(thetagridAngle[:-1]) % 360, self.itemLlabels, fontsize=10, font_properties=fontprop)  # 軸ラベル
+        ax.set_thetagrids(np.rad2deg(thetagridAngle[:-1]) % 360, self.itemLlabels, fontsize=10, font_properties=self.fontprop)  # 軸ラベル
         ax.set_thetagrids(np.rad2deg(thetagridAngle[:-1]) % 360, self.itemLlabels, fontsize=10)  # 軸ラベル
         ax.tick_params(axis='x', pad=30, left=True, length=6, width=1, direction='inout')
         
         # 数値軸
         ax.set_rlim(0 , np.max(self.valueList))   
-        ax.set_rgrids(self.valueList, angle=90, labels=self.valueLabels, fontsize=8, font_properties=fontprop)
+        ax.set_rgrids(self.valueList, angle=90, labels=self.valueLabels, fontsize=8, font_properties=self.fontprop)
         ax.set_rgrids(self.valueList, angle=90, labels=self.valueLabels, fontsize=8)
         ax.tick_params(axis='y', pad=0, left=True, length=0, width=0, direction='inout')
         
