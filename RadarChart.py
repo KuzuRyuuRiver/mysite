@@ -4,9 +4,13 @@
 # ver 0                                                               #
 # 200000:                                                             #
 #######################################################################
+import matplotlib
+# matplotlib.use('Agg')
 import matplotlib.pyplot as plt
-import japanize_matplotlib
+#import japanize_matplotlib
 import numpy as np
+from matplotlib.font_manager import FontProperties
+fontprop = FontProperties(fname='.fonts/ipaexg.ttf', size=10)
 
 class RadarChartPlot:
     def __init__(self, itemLlabels, valueList, valueLabels = None):
@@ -29,11 +33,13 @@ class RadarChartPlot:
         
         # 項目軸
         thetagridAngle = np.linspace(0, 2 * np.pi, len(self.itemLlabels) + 1, endpoint=True) + 0.5 * np.pi
+        ax.set_thetagrids(np.rad2deg(thetagridAngle[:-1]) % 360, self.itemLlabels, fontsize=10, font_properties=fontprop)  # 軸ラベル
         ax.set_thetagrids(np.rad2deg(thetagridAngle[:-1]) % 360, self.itemLlabels, fontsize=10)  # 軸ラベル
         ax.tick_params(axis='x', pad=30, left=True, length=6, width=1, direction='inout')
         
         # 数値軸
         ax.set_rlim(0 , np.max(self.valueList))   
+        ax.set_rgrids(self.valueList, angle=90, labels=self.valueLabels, fontsize=8, font_properties=fontprop)
         ax.set_rgrids(self.valueList, angle=90, labels=self.valueLabels, fontsize=8)
         ax.tick_params(axis='y', pad=0, left=True, length=0, width=0, direction='inout')
         
@@ -55,6 +61,7 @@ class RadarChartPlot:
             ax.fill(thetagridAngle, values, facecolor=facecolor, alpha=alpha, \
                     linestyle=dic['linestyle'], edgecolor= dic['color'], label=dic['label'])  # 塗りつぶし
         ax.legend(bbox_to_anchor=(1.35, -0.1), loc="lower right", borderaxespad=0, fontsize=10)
+        #ax.legend(bbox_to_anchor=(1.35, -0.1), loc="lower right", borderaxespad=0, fontsize=10)
         self.fig.tight_layout()
         return self.fig
         
@@ -85,12 +92,13 @@ def test():
     valueList = [50*i for i in range(6)]
     rcp = RadarChartPlot(itemLabels, valueList)
     rcp.plot(values, color='red', linestyle='dashed', marker='.', label='test', fill=True)
-    rcp.show()
+    fig = rcp.show()
+    return fig
     
 if __name__ == '__main__':    
     import time
     t0 = time.perf_counter()
-    test()
+    fig = test()
 
     t1 = time.perf_counter()
     print ("elapsed_time:{%f} [sec]"%(t1-t0))
